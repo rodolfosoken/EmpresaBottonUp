@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import modelo.Departamento;
 import modelo.Dependente;
 import modelo.Funcionario;
+import modelo.Projeto;
 import view.ViewFuncionario;
 
 /**
@@ -36,8 +37,8 @@ public class FuncionarioDAO {
         this.emf = emf;
         this.view = view;
     }
-    
-      public void insere(Funcionario funcionario) {
+
+    public void insere(Funcionario funcionario) {
         if (funcionario.getDependenteCollection() == null) {
             funcionario.setDependenteCollection(new ArrayList<>());
         }
@@ -50,7 +51,8 @@ public class FuncionarioDAO {
             em.close();
         }
     }
- public void remove(String cpf) throws NonexistentEntityException {
+
+    public void remove(String cpf) throws NonexistentEntityException {
         EntityManager em = getEm();
         em.getTransaction().begin();
         Funcionario funcionario;
@@ -74,8 +76,8 @@ public class FuncionarioDAO {
         em.getTransaction().commit();
         System.out.println("Empregado com CPF: " + cpf + " removido com sucesso!");
     }
-    
-  public Funcionario getFuncionario(String cpf) {
+
+    public Funcionario getFuncionario(String cpf) {
         EntityManager em = getEm();
         try {
             return em.find(Funcionario.class, cpf);
@@ -83,7 +85,7 @@ public class FuncionarioDAO {
             em.close();
         }
     }
-  
+
     private List<Funcionario> listaFuncionario() {
         EntityManager em = getEm();
         try {
@@ -95,9 +97,9 @@ public class FuncionarioDAO {
             em.close();
         }
     }
-    
-        public void exibiLista(){
-        List<Funcionario> lista  = listaFuncionario();
+
+    public void exibiLista() {
+        List<Funcionario> lista = listaFuncionario();
         view.cabecalho();
         for (Funcionario funcionario : lista) {
             String string = funcionario.getNome() + "\t|\t" + funcionario.getCpf()
@@ -106,10 +108,33 @@ public class FuncionarioDAO {
                     + "\t |\t" + funcionario.getNdep();
             view.exibiLista(string);
         }
-        
+
     }
-    
-  
- 
+
+    public void exibiLista(List<Funcionario> lista) {
+        view.cabecalho();
+        for (Funcionario funcionario : lista) {
+            String string = funcionario.getNome() + "\t|\t" + funcionario.getCpf()
+                    + "\t|\t" + funcionario.getDatanasc() + "\t |\t"
+                    + funcionario.getEndereco() + "\t |\t" + funcionario.getSexo()
+                    + "\t |\t" + funcionario.getNdep().getNumero();
+            view.exibiLista(string);
+        }
+
+    }
+
+    public List<Funcionario> inProject(Funcionario funcRef) {
+        List<Funcionario> todos = listaFuncionario();
+        List<Funcionario> selecionados = new ArrayList<>();
+        for (Funcionario funcionario : todos) {
+            Collection<Projeto> projetos_func = funcionario.getProjetoCollection();
+            if (!(projetos_func.isEmpty() || funcionario.getCpf().equals(funcRef.getCpf()))) {
+                if (projetos_func.containsAll(funcRef.getProjetoCollection())) {
+                    selecionados.add(funcionario);
+                }
+            }
+        }
+        return selecionados;
+    }
 
 }

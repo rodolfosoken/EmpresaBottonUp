@@ -6,8 +6,10 @@
 package empresabuttonup;
 
 import controle.FuncionarioDAO;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import modelo.Funcionario;
 import view.ViewFuncionario;
 
 
@@ -25,8 +27,9 @@ public class EmpresaButtonUp {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("empresaButtonUpPU");
         ViewFuncionario view = new ViewFuncionario();
         FuncionarioDAO dao = new FuncionarioDAO(emf, view);
-        dao.exibiLista();
-
+        Funcionario funcionario = dao.getFuncionario("66666666");
+        List <Funcionario> selecionados = dao.inProject(funcionario);
+        dao.exibiLista(selecionados);
     }
 
 }
