@@ -5,10 +5,10 @@
  */
 package empresabuttonup;
 
-import controle.EmpregadoDAO;
+import controle.FuncionarioDAO;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import view.viewEmpregado;
+import view.ViewFuncionario;
 
 
 
@@ -23,8 +23,8 @@ public class EmpresaButtonUp {
      */
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("empresaButtonUpPU");
-        viewEmpregado view = new viewEmpregado();
-        EmpregadoDAO dao = new EmpregadoDAO(emf, view);
+        ViewFuncionario view = new ViewFuncionario();
+        FuncionarioDAO dao = new FuncionarioDAO(emf, view);
         dao.exibiLista();
 
     }

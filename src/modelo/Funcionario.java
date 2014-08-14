@@ -15,6 +15,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -30,16 +32,16 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Rodolfo
  */
 @Entity
-@Table(name = "empregado")
+@Table(name = "funcionario")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Empregado.findAll", query = "SELECT e FROM Empregado e"),
-    @NamedQuery(name = "Empregado.findByNome", query = "SELECT e FROM Empregado e WHERE e.nome = :nome"),
-    @NamedQuery(name = "Empregado.findByCpf", query = "SELECT e FROM Empregado e WHERE e.cpf = :cpf"),
-    @NamedQuery(name = "Empregado.findByDatanasc", query = "SELECT e FROM Empregado e WHERE e.datanasc = :datanasc"),
-    @NamedQuery(name = "Empregado.findByEndereco", query = "SELECT e FROM Empregado e WHERE e.endereco = :endereco"),
-    @NamedQuery(name = "Empregado.findBySexo", query = "SELECT e FROM Empregado e WHERE e.sexo = :sexo")})
-public class Empregado implements Serializable {
+    @NamedQuery(name = "Funcionario.findAll", query = "SELECT f FROM Funcionario f"),
+    @NamedQuery(name = "Funcionario.findByNome", query = "SELECT f FROM Funcionario f WHERE f.nome = :nome"),
+    @NamedQuery(name = "Funcionario.findByCpf", query = "SELECT f FROM Funcionario f WHERE f.cpf = :cpf"),
+    @NamedQuery(name = "Funcionario.findByDatanasc", query = "SELECT f FROM Funcionario f WHERE f.datanasc = :datanasc"),
+    @NamedQuery(name = "Funcionario.findByEndereco", query = "SELECT f FROM Funcionario f WHERE f.endereco = :endereco"),
+    @NamedQuery(name = "Funcionario.findBySexo", query = "SELECT f FROM Funcionario f WHERE f.sexo = :sexo")})
+public class Funcionario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "NOME")
@@ -55,20 +57,25 @@ public class Empregado implements Serializable {
     private String endereco;
     @Column(name = "SEXO")
     private Character sexo;
+    @JoinTable(name = "trabalha_em", joinColumns = {
+        @JoinColumn(name = "CPF_FUNC", referencedColumnName = "CPF")}, inverseJoinColumns = {
+        @JoinColumn(name = "NPROJ", referencedColumnName = "NUMERO")})
+    @ManyToMany
+    private Collection<Projeto> projetoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "funcionario")
+    private Collection<Dependente> dependenteCollection;
     @JoinColumn(name = "NDEP", referencedColumnName = "NUMERO")
     @ManyToOne(optional = false)
     private Departamento ndep;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empregado")
-    private Collection<Dependente> dependenteCollection;
 
-    public Empregado() {
+    public Funcionario() {
     }
 
-    public Empregado(String cpf) {
+    public Funcionario(String cpf) {
         this.cpf = cpf;
     }
 
-    public Empregado(String cpf, String nome) {
+    public Funcionario(String cpf, String nome) {
         this.cpf = cpf;
         this.nome = nome;
     }
@@ -113,12 +120,13 @@ public class Empregado implements Serializable {
         this.sexo = sexo;
     }
 
-    public Departamento getNdep() {
-        return ndep;
+    @XmlTransient
+    public Collection<Projeto> getProjetoCollection() {
+        return projetoCollection;
     }
 
-    public void setNdep(Departamento ndep) {
-        this.ndep = ndep;
+    public void setProjetoCollection(Collection<Projeto> projetoCollection) {
+        this.projetoCollection = projetoCollection;
     }
 
     @XmlTransient
@@ -128,6 +136,14 @@ public class Empregado implements Serializable {
 
     public void setDependenteCollection(Collection<Dependente> dependenteCollection) {
         this.dependenteCollection = dependenteCollection;
+    }
+
+    public Departamento getNdep() {
+        return ndep;
+    }
+
+    public void setNdep(Departamento ndep) {
+        this.ndep = ndep;
     }
 
     @Override
@@ -140,10 +156,10 @@ public class Empregado implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Empregado)) {
+        if (!(object instanceof Funcionario)) {
             return false;
         }
-        Empregado other = (Empregado) object;
+        Funcionario other = (Funcionario) object;
         if ((this.cpf == null && other.cpf != null) || (this.cpf != null && !this.cpf.equals(other.cpf))) {
             return false;
         }
@@ -152,7 +168,7 @@ public class Empregado implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Empregado[ cpf=" + cpf + " ]";
+        return "modelo.Funcionario[ cpf=" + cpf + " ]";
     }
     
 }

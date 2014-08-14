@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Dependente.findAll", query = "SELECT d FROM Dependente d"),
     @NamedQuery(name = "Dependente.findByNome", query = "SELECT d FROM Dependente d WHERE d.dependentePK.nome = :nome"),
-    @NamedQuery(name = "Dependente.findByCpf", query = "SELECT d FROM Dependente d WHERE d.dependentePK.cpf = :cpf"),
+    @NamedQuery(name = "Dependente.findByCPFFunc", query = "SELECT d FROM Dependente d WHERE d.dependentePK.cPFFunc = :cPFFunc"),
     @NamedQuery(name = "Dependente.findByDatanasc", query = "SELECT d FROM Dependente d WHERE d.datanasc = :datanasc"),
     @NamedQuery(name = "Dependente.findBySexo", query = "SELECT d FROM Dependente d WHERE d.sexo = :sexo")})
 public class Dependente implements Serializable {
@@ -42,9 +42,9 @@ public class Dependente implements Serializable {
     private Date datanasc;
     @Column(name = "SEXO")
     private Character sexo;
-    @JoinColumn(name = "CPF", referencedColumnName = "CPF", insertable = false, updatable = false)
+    @JoinColumn(name = "CPF_Func", referencedColumnName = "CPF", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Empregado empregado;
+    private Funcionario funcionario;
 
     public Dependente() {
     }
@@ -53,8 +53,8 @@ public class Dependente implements Serializable {
         this.dependentePK = dependentePK;
     }
 
-    public Dependente(String nome, String cpf) {
-        this.dependentePK = new DependentePK(nome, cpf);
+    public Dependente(String nome, String cPFFunc) {
+        this.dependentePK = new DependentePK(nome, cPFFunc);
     }
 
     public DependentePK getDependentePK() {
@@ -81,12 +81,12 @@ public class Dependente implements Serializable {
         this.sexo = sexo;
     }
 
-    public Empregado getEmpregado() {
-        return empregado;
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
-    public void setEmpregado(Empregado empregado) {
-        this.empregado = empregado;
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 
     @Override

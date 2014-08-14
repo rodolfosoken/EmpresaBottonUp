@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import modelo.Dependente;
 import modelo.DependentePK;
-import modelo.Empregado;
+import modelo.Funcionario;
 
 /**
  *
@@ -31,9 +31,9 @@ public class DependenteDAO {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         Dependente dependente = em.getReference(Dependente.class, id);
-        Empregado empregado = dependente.getEmpregado();
-        empregado.getDependenteCollection().remove(dependente);
-        empregado = em.merge(empregado);
+        Funcionario funcionario = dependente.getFuncionario();
+        funcionario.getDependenteCollection().remove(dependente);
+        funcionario = em.merge(funcionario);
         em.remove(dependente);
         em.getTransaction().commit();
         em.close();

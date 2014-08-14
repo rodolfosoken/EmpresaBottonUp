@@ -11,7 +11,7 @@ package view;
  *
  * @author Rodolfo
  */
-public class viewEmpregado {
+public class ViewFuncionario {
 
     public void cabecalho() {
         System.out.println("NOME    |   CPF     |   DATANASC    "

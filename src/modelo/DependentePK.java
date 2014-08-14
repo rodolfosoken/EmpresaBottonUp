@@ -21,15 +21,15 @@ public class DependentePK implements Serializable {
     @Column(name = "NOME")
     private String nome;
     @Basic(optional = false)
-    @Column(name = "CPF")
-    private String cpf;
+    @Column(name = "CPF_Func")
+    private String cPFFunc;
 
     public DependentePK() {
     }
 
-    public DependentePK(String nome, String cpf) {
+    public DependentePK(String nome, String cPFFunc) {
         this.nome = nome;
-        this.cpf = cpf;
+        this.cPFFunc = cPFFunc;
     }
 
     public String getNome() {
@@ -40,19 +40,19 @@ public class DependentePK implements Serializable {
         this.nome = nome;
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getCPFFunc() {
+        return cPFFunc;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setCPFFunc(String cPFFunc) {
+        this.cPFFunc = cPFFunc;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (nome != null ? nome.hashCode() : 0);
-        hash += (cpf != null ? cpf.hashCode() : 0);
+        hash += (cPFFunc != null ? cPFFunc.hashCode() : 0);
         return hash;
     }
 
@@ -66,7 +66,7 @@ public class DependentePK implements Serializable {
         if ((this.nome == null && other.nome != null) || (this.nome != null && !this.nome.equals(other.nome))) {
             return false;
         }
-        if ((this.cpf == null && other.cpf != null) || (this.cpf != null && !this.cpf.equals(other.cpf))) {
+        if ((this.cPFFunc == null && other.cPFFunc != null) || (this.cPFFunc != null && !this.cPFFunc.equals(other.cPFFunc))) {
             return false;
         }
         return true;
@@ -74,7 +74,7 @@ public class DependentePK implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.DependentePK[ nome=" + nome + ", cpf=" + cpf + " ]";
+        return "modelo.DependentePK[ nome=" + nome + ", cPFFunc=" + cPFFunc + " ]";
     }
     
 }

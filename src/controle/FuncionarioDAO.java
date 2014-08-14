@@ -6,7 +6,6 @@
 package controle;
 
 import controle.exceptions.NonexistentEntityException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,83 +16,79 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import modelo.Departamento;
 import modelo.Dependente;
-import modelo.Empregado;
-import view.viewEmpregado;
+import modelo.Funcionario;
+import view.ViewFuncionario;
 
 /**
  *
  * @author Rodolfo
  */
-public class EmpregadoDAO implements Serializable {
+public class FuncionarioDAO {
 
-    /**
-     * @return the emf
-     */
     public EntityManager getEm() {
         return emf.createEntityManager();
     }
 
     private EntityManagerFactory emf = null;
-    private viewEmpregado view = null;
+    private ViewFuncionario view = null;
 
-    public EmpregadoDAO(EntityManagerFactory emf , viewEmpregado view) {
+    public FuncionarioDAO(EntityManagerFactory emf, ViewFuncionario view) {
         this.emf = emf;
         this.view = view;
     }
-
-    public void insere(Empregado empregado) {
-        if (empregado.getDependenteCollection() == null) {
-            empregado.setDependenteCollection(new ArrayList<>());
+    
+      public void insere(Funcionario funcionario) {
+        if (funcionario.getDependenteCollection() == null) {
+            funcionario.setDependenteCollection(new ArrayList<>());
         }
         EntityManager em = getEm();
         em.getTransaction().begin();
         try {
-            em.persist(empregado);
+            em.persist(funcionario);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
-
-    public void remove(String cpf) throws NonexistentEntityException {
+ public void remove(String cpf) throws NonexistentEntityException {
         EntityManager em = getEm();
         em.getTransaction().begin();
-        Empregado empregado;
+        Funcionario funcionario;
         try {
-            empregado = em.getReference(Empregado.class, cpf);
+            funcionario = em.getReference(Funcionario.class, cpf);
         } catch (EntityNotFoundException ex) {
-            throw new NonexistentEntityException("Empregado com CPF: " + cpf + "nao existe", ex);
+            throw new NonexistentEntityException("Funcionario com CPF: " + cpf + "nao existe", ex);
         }
 
         DependenteDAO contDepe = new DependenteDAO(emf);
-        Collection<Dependente> dependente = empregado.getDependenteCollection();
+        Collection<Dependente> dependente = funcionario.getDependenteCollection();
         for (Dependente dep : dependente) {
             contDepe.remove(dep.getDependentePK());
         }
 
-        Departamento departamento = empregado.getNdep();
-        departamento.getEmpregadoCollection().remove(empregado);
+        Departamento departamento = funcionario.getNdep();
+        departamento.getFuncionarioCollection().remove(funcionario);
         departamento = em.merge(departamento);
 
-        em.remove(empregado);
+        em.remove(funcionario);
         em.getTransaction().commit();
         System.out.println("Empregado com CPF: " + cpf + " removido com sucesso!");
     }
-
-    public Empregado getEmpregado(String cpf) {
+    
+  public Funcionario getFuncionario(String cpf) {
         EntityManager em = getEm();
         try {
-            return em.find(Empregado.class, cpf);
+            return em.find(Funcionario.class, cpf);
         } finally {
             em.close();
         }
     }
-
-    private List<Empregado> listaEmpregado() {
+  
+    private List<Funcionario> listaFuncionario() {
         EntityManager em = getEm();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Empregado.class));
+            cq.select(cq.from(Funcionario.class));
             Query q = em.createQuery(cq);
             return q.getResultList();
         } finally {
@@ -101,22 +96,20 @@ public class EmpregadoDAO implements Serializable {
         }
     }
     
-    public void exibiLista(){
-        List<Empregado> lista  = listaEmpregado();
+        public void exibiLista(){
+        List<Funcionario> lista  = listaFuncionario();
         view.cabecalho();
-        for (Empregado empregado : lista) {
-            String string = empregado.getNome() + "\t|\t" + empregado.getCpf()
-                    + "\t|\t" + empregado.getDatanasc() + "\t |\t"
-                    + empregado.getEndereco() + "\t |\t" + empregado.getSexo()
-                    + "\t |\t" + empregado.getNdep();
+        for (Funcionario funcionario : lista) {
+            String string = funcionario.getNome() + "\t|\t" + funcionario.getCpf()
+                    + "\t|\t" + funcionario.getDatanasc() + "\t |\t"
+                    + funcionario.getEndereco() + "\t |\t" + funcionario.getSexo()
+                    + "\t |\t" + funcionario.getNdep();
             view.exibiLista(string);
         }
         
     }
-        
     
-    public void inProjeto(Empregado empregado){
-        
-    }
+  
+ 
 
 }
