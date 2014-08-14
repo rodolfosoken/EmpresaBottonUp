@@ -8,48 +8,36 @@ package controle;
 import java.util.ArrayList;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import modelo.Dependente;
-import modelo.DependentePK;
-import modelo.Funcionario;
+import modelo.Projeto;
 
 /**
  *
  * @author Rodolfo
  */
-public class DependenteDAO {
+public class ProjetoDAO {
 
     private EntityManagerFactory emf;
 
-    public DependenteDAO(EntityManagerFactory emf) {
+    public ProjetoDAO(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
-    public void insere(Dependente dependente){
+
+    public void insere(Projeto projeto) {
+        if (projeto.getFuncionarioCollection() == null) {
+            projeto.setFuncionarioCollection(new ArrayList<>());
+        }
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            em.persist(dependente);
+            em.persist(projeto);
             em.getTransaction().commit();
         } finally {
             em.close();
         }
-    }
-
-    public void remove(DependentePK id) {
-        EntityManager em = getEntityManager();
-        em.getTransaction().begin();
-        Dependente dependente = em.getReference(Dependente.class, id);
-        Funcionario funcionario = dependente.getFuncionario();
-        funcionario.getDependenteCollection().remove(dependente);
-        funcionario = em.merge(funcionario);
-        em.remove(dependente);
-        em.getTransaction().commit();
-        em.close();
-
     }
 
 }

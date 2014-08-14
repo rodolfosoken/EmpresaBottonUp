@@ -7,12 +7,11 @@ package empresabuttonup;
 
 import controle.FuncionarioDAO;
 import java.util.List;
+import java.util.Scanner;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import modelo.Funcionario;
 import view.ViewFuncionario;
-
-
 
 /**
  *
@@ -25,11 +24,23 @@ public class EmpresaButtonUp {
      */
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("empresaButtonUpPU");
-        ViewFuncionario view = new ViewFuncionario();
-        FuncionarioDAO dao = new FuncionarioDAO(emf, view);
-        Funcionario funcionario = dao.getFuncionario("66666666");
-        List <Funcionario> selecionados = dao.inProject(funcionario);
-        dao.exibiLista(selecionados);
+        int op = 0;
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("1- Funcionario || 2- Dependente || 3 - Projeto || 4-Sair");
+            op = sc.nextInt();
+
+            switch (op) {
+                case 1:
+                    ViewFuncionario view = new ViewFuncionario();
+                    FuncionarioDAO dao = new FuncionarioDAO(emf, view);
+                    break;
+
+                case 4:
+                    return;
+            }
+        }
     }
 
 }
