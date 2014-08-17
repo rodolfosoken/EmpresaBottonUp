@@ -15,6 +15,7 @@ public class ViewDependente {
     
     private int opcao;
     private ViewFuncionario funcionario;
+    private String cpf;
     private String datanasc;
     private String sexo;
     private String nome;
@@ -26,16 +27,18 @@ public class ViewDependente {
 
     public ViewDependente() {
         getOpcoes();
+        
     }
 
     public void getOpcoes() {
         System.out.println("1- Adicionar dependente || 2- Remover || 3- Listar todos os dependentes || 4- Sair ");
         Scanner sc = new Scanner(System.in);
+        setOpcao(sc.nextInt());
         switch(getOpcao()){
             case 1:
                 System.out.println("Insira o cpf do Funcionario: ");
                 Scanner sc1 = new Scanner(System.in);
-                funcionario.setCpf(sc1.nextLine());
+                setCpf(sc1.nextLine());
                 insere();
                 return;
                 
@@ -45,7 +48,7 @@ public class ViewDependente {
                 setNome(sc2.nextLine());
                 System.out.println("Insira o CPF do Funcionario: ");
                 Scanner sc3 = new Scanner(System.in);
-                funcionario.setCpf(sc3.nextLine());
+                setCpf(sc3.nextLine());
                 return;
                 
             case 3:
@@ -68,6 +71,15 @@ public class ViewDependente {
         System.out.println("Insira o sexo: ");
         Scanner sc2 = new Scanner(System.in);
         setSexo(sc2.nextLine());
+    }
+    
+    
+    public void cabecalho(){
+        System.out.println("Nome    |       CPF_Func        |       DataNasc        |   Sexo    |");
+    }
+    
+        public void exibiLinha(String string) {
+        System.out.println(string);
     }
 
     /**
@@ -138,6 +150,20 @@ public class ViewDependente {
      */
     public void setOpcao(int opcao) {
         this.opcao = opcao;
+    }
+
+    /**
+     * @return the cpf
+     */
+    public String getCpf() {
+        return cpf;
+    }
+
+    /**
+     * @param cpf the cpf to set
+     */
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
 }
