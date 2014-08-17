@@ -6,9 +6,14 @@
 package controle;
 
 import controle.exceptions.NonexistentEntityException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
@@ -18,6 +23,7 @@ import modelo.Departamento;
 import modelo.Dependente;
 import modelo.Funcionario;
 import modelo.Projeto;
+import view.ViewDependente;
 import view.ViewFuncionario;
 
 /**
@@ -32,15 +38,62 @@ public class FuncionarioDAO {
 
     private EntityManagerFactory emf = null;
     private ViewFuncionario view = null;
+    private Funcionario funcionario = null;
 
-    public FuncionarioDAO(EntityManagerFactory emf, ViewFuncionario view) {
+    public FuncionarioDAO(EntityManagerFactory emf, ViewFuncionario view, Funcionario model) {
         this.emf = emf;
         this.view = view;
+        this.funcionario = model;
+
+        //faz o papel do ActionListener
+        switch (view.getOp()) {
+            case 1:
+                insere();
+                System.out.println("Funcionario cadastrado com sucesso!");
+                break;
+
+            case 2:
+                try {
+                    remove(view.getCpf());
+                } catch (NonexistentEntityException ex) {
+                    Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                System.out.println("Empregado com CPF: " + view.getCpf() + " removido com sucesso!");
+                break;
+
+            case 3:
+                exibiLista();
+                break;
+
+        }
     }
 
-    public void insere(Funcionario funcionario) {
+    public void viewToModel() {
+        funcionario.setCpf(view.getCpf());
+        funcionario.setEndereco(view.getEndereco());
+        funcionario.setNome(view.getNome());
+        funcionario.setSexo(view.getSexo().toCharArray()[0]);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            funcionario.setDatanasc((Date) df.parse(view.getDatanasc()));
+        } catch (ParseException ex) {
+            Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DepartamentoDAO daoDep = new DepartamentoDAO(emf);
+        funcionario.setNdep(daoDep.getDepartamento(view.getnDep()));
+//        for (ViewDependente viewDep : view.getViewDependente()) {
+//            
+//        }
+
+    }
+
+    public void insere() {
+        viewToModel();
         if (funcionario.getDependenteCollection() == null) {
             funcionario.setDependenteCollection(new ArrayList<>());
+        }
+        if (funcionario.getProjetoCollection() == null) {
+            funcionario.setProjetoCollection(new ArrayList<>());
         }
         EntityManager em = getEm();
         em.getTransaction().begin();
@@ -55,7 +108,7 @@ public class FuncionarioDAO {
     public void remove(String cpf) throws NonexistentEntityException {
         EntityManager em = getEm();
         em.getTransaction().begin();
-        Funcionario funcionario;
+        //Funcionario funcionario;
         try {
             funcionario = em.getReference(Funcionario.class, cpf);
         } catch (EntityNotFoundException ex) {
@@ -74,7 +127,6 @@ public class FuncionarioDAO {
 
         em.remove(funcionario);
         em.getTransaction().commit();
-        System.out.println("Empregado com CPF: " + cpf + " removido com sucesso!");
     }
 
     public Funcionario getFuncionario(String cpf) {
@@ -101,11 +153,12 @@ public class FuncionarioDAO {
     public void exibiLista() {
         List<Funcionario> lista = listaFuncionario();
         view.cabecalho();
-        for (Funcionario funcionario : lista) {
-            String string = funcionario.getNome() + "\t|\t" + funcionario.getCpf()
-                    + "\t|\t" + funcionario.getDatanasc() + "\t |\t"
-                    + funcionario.getEndereco() + "\t |\t" + funcionario.getSexo()
-                    + "\t |\t" + funcionario.getNdep();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        for (Funcionario funcionario1 : lista) {
+            String string = funcionario1.getNome() + "\t|\t" + funcionario1.getCpf()
+                    + "\t|\t" + df.format(funcionario1.getDatanasc()) + "\t |\t"
+                    + funcionario1.getEndereco() + "  \t|\t" + funcionario1.getSexo()
+                    + "\t |\t" + funcionario1.getNdep().getNumero();
             view.exibiLista(string);
         }
 
@@ -113,11 +166,12 @@ public class FuncionarioDAO {
 
     public void exibiLista(List<Funcionario> lista) {
         view.cabecalho();
-        for (Funcionario funcionario : lista) {
-            String string = funcionario.getNome() + "\t|\t" + funcionario.getCpf()
-                    + "\t|\t" + funcionario.getDatanasc() + "\t |\t"
-                    + funcionario.getEndereco() + "\t |\t" + funcionario.getSexo()
-                    + "\t |\t" + funcionario.getNdep().getNumero();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        for (Funcionario funcionario1 : lista) {
+            String string = funcionario1.getNome() + "\t|\t" + funcionario1.getCpf()
+                    + "\t|\t" + df.format(funcionario1.getDatanasc()) + "\t |\t"
+                    + funcionario1.getEndereco() + "  \t |\t" + funcionario1.getSexo()
+                    + "\t |\t" + funcionario1.getNdep().getNumero();
             view.exibiLista(string);
         }
 
@@ -126,15 +180,30 @@ public class FuncionarioDAO {
     public List<Funcionario> inProject(Funcionario funcRef) {
         List<Funcionario> todos = listaFuncionario();
         List<Funcionario> selecionados = new ArrayList<>();
-        for (Funcionario funcionario : todos) {
-            Collection<Projeto> projetos_func = funcionario.getProjetoCollection();
-            if (!(projetos_func.isEmpty() || funcionario.getCpf().equals(funcRef.getCpf()))) {
+        for (Funcionario funcionario1 : todos) {
+            Collection<Projeto> projetos_func = funcionario1.getProjetoCollection();
+            if (!(projetos_func.isEmpty() || funcionario1.getCpf().equals(funcRef.getCpf()))) {
                 if (projetos_func.containsAll(funcRef.getProjetoCollection())) {
-                    selecionados.add(funcionario);
+                    selecionados.add(funcionario1);
                 }
             }
         }
         return selecionados;
+    }
+
+    public boolean existe(String cpf) {
+        boolean existe = false;
+        EntityManager em = getEm();
+        try {
+            if (em.find(Funcionario.class, cpf) != null) {
+                existe = true;
+            }
+        } finally {
+            em.close();
+        }
+
+        return existe;
+
     }
 
 }

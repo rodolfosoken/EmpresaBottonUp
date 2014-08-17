@@ -5,7 +5,6 @@
  */
 package controle;
 
-import java.util.ArrayList;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import modelo.Dependente;

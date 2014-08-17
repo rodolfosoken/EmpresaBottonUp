@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -18,8 +19,9 @@ public class ViewFuncionario {
     private String cpf;
     private String datanasc;
     private String endereco;
-    private Character sexo;
+    private String sexo;
     private int nDep;
+    private List<ViewDependente> viewDependente;
 
     public ViewFuncionario() {
         getOpcoes();
@@ -28,31 +30,59 @@ public class ViewFuncionario {
     public void getOpcoes() {
         while (true) {
             System.out.println("1- Inserir Funcionario || 2- Remover Funcionario || "
-                    + "3- Listar todos || 4 - Divisão de Algebra Relacional || 5- Sair");
+                    + "3- Listar todos || 4 - Todos que trabalharam com o funcionario: || 5- Sair");
             Scanner sc = new Scanner(System.in);
-            op = sc.nextInt();
+            setOp(sc.nextInt());
 
-            switch (op) {
+            switch (getOp()) {
                 case 1:
-                    System.out.println("Insira o nome:");
                     Scanner sc2 = new Scanner(System.in);
-                    String n = sc2.nextLine();
-                    setNome(n);
-                    break;
+                    System.out.println("Insira o nome:");
+                    setNome(sc2.nextLine());
+                    System.out.println("Insira o CPF:");
+                    setCpf(sc2.nextLine());
+                    System.out.println("Insira o Endereço:");
+                    setEndereco(sc2.nextLine());
+                    System.out.println("Insira a data de nascimento:");
+                    setDatanasc(sc2.nextLine());
+                    System.out.println("Insira o sexo:");
+                    setSexo(sc2.nextLine());
+                    System.out.println("Insira o numero do departamento:");
+                    setnDep(sc2.nextInt());
+                    System.out.println("Ha dependentes? (y\\n): ");
+                    Scanner scdep = new Scanner(System.in);
+                    if (scdep.nextLine().equals("y")) {
+                        System.out.println("Quantos dependentes?: ");
+                        Scanner sc3 = new Scanner(System.in);
+                        int num  = sc3.nextInt();
+                        while(num >= 0){
+                        ViewDependente dependente = new ViewDependente();
+                        getViewDependente().add(dependente);
+                        num--;
+                        }
+                    }
+                    return;
+
+                case 2:
+                    System.out.println("Insira o CPF do Funcionario: ");
+                    Scanner sc1 = new Scanner(System.in);
+                    setCpf(sc1.nextLine());
+                    return;
+                    
+                case 3:
+                    System.out.println("Funcionarios da empresa:");
+                    return;
 
                 case 5:
                     return;
 
             }
-            
-            System.out.println(getNome());
-
         }
     }
 
     public void cabecalho() {
-        System.out.println("NOME    |   CPF     |   DATANASC    "
-                + "|   ENDERECO    |   SEXO    |   NDEP |");
+        System.out.println("NOME    |       CPF              |      DATANASC    "
+                + "     |      ENDERECO                |       SEXO     |   NDEP |");
     }
 
     public void exibiLista(String string) {
@@ -118,14 +148,14 @@ public class ViewFuncionario {
     /**
      * @return the sexo
      */
-    public Character getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
     /**
      * @param sexo the sexo to set
      */
-    public void setSexo(Character sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 
@@ -141,6 +171,35 @@ public class ViewFuncionario {
      */
     public void setnDep(int nDep) {
         this.nDep = nDep;
+    }
+
+
+    /**
+     * @return the viewDependente
+     */
+    public List<ViewDependente> getViewDependente() {
+        return viewDependente;
+    }
+
+    /**
+     * @param viewDependente the viewDependente to set
+     */
+    public void setViewDependente(List<ViewDependente> viewDependente) {
+        this.viewDependente = viewDependente;
+    }
+
+    /**
+     * @return the op
+     */
+    public int getOp() {
+        return op;
+    }
+
+    /**
+     * @param op the op to set
+     */
+    public void setOp(int op) {
+        this.op = op;
     }
 
 }

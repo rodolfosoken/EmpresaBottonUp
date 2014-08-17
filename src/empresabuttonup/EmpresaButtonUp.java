@@ -34,13 +34,15 @@ public class EmpresaButtonUp {
             switch (op) {
                 case 1:
                     ViewFuncionario view = new ViewFuncionario();
-                    FuncionarioDAO dao = new FuncionarioDAO(emf, view);
+                    Funcionario model = new Funcionario();
+                    FuncionarioDAO dao = new FuncionarioDAO(emf, view, model);
                     break;
 
                 case 4:
                     return;
             }
         }
+                
     }
 
 }
