@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,7 +22,7 @@ public class ViewFuncionario {
     private String endereco;
     private String sexo;
     private int nDep;
-    private List<ViewDependente> viewDependente;
+    private List<ViewDependente> viewDependente = new ArrayList<ViewDependente>();
 
     public ViewFuncionario() {
         getOpcoes();
@@ -30,7 +31,7 @@ public class ViewFuncionario {
     public void getOpcoes() {
         while (true) {
             System.out.println("1- Inserir Funcionario || 2- Remover Funcionario || "
-                    + "3- Listar todos || 4 - Todos que trabalharam com o funcionario: || 5- Sair");
+                    + "3- Listar todos || 4 - Todos que trabalharam com o funcionario de cpf: || 5- Dados do Funcionario com Cpf: || 6- Sair");
             Scanner sc = new Scanner(System.in);
             setOp(sc.nextInt());
 
@@ -55,8 +56,8 @@ public class ViewFuncionario {
                         System.out.println("Quantos dependentes?: ");
                         Scanner sc3 = new Scanner(System.in);
                         int num  = sc3.nextInt();
-                        while(num >= 0){
-                        ViewDependente dependente = new ViewDependente();
+                        while(num >= 1){
+                        ViewDependente dependente = new ViewDependente(this);
                         getViewDependente().add(dependente);
                         num--;
                         }
@@ -72,8 +73,18 @@ public class ViewFuncionario {
                 case 3:
                     System.out.println("Funcionarios da empresa:");
                     return;
+                    
+                case 4:
+                    Scanner sc3 = new Scanner(System.in);
+                    setCpf(sc3.nextLine());
+                    return;
 
                 case 5:
+                    Scanner sc4 = new Scanner(System.in);
+                    setCpf(sc4.nextLine());
+                    return;
+                    
+                case 6:
                     return;
 
             }
@@ -85,7 +96,7 @@ public class ViewFuncionario {
                 + "     |      ENDERECO                |       SEXO     |   NDEP |");
     }
 
-    public void exibiLista(String string) {
+    public void exibiLinha(String string) {
         System.out.println(string);
     }
 

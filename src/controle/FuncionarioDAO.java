@@ -58,14 +58,29 @@ public class FuncionarioDAO {
                 } catch (NonexistentEntityException ex) {
                     Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                System.out.println("Empregado com CPF: " + view.getCpf() + " removido com sucesso!");
+                System.out.println("Empregado com CPF: " + view.getCpf() + " foi removido com sucesso!");
                 break;
 
             case 3:
                 exibiLista();
                 break;
 
+            case 4:
+                funcionario = getFuncionario(view.getCpf());
+                exibiLista(inProject(funcionario));
+                break;
+
+            case 5:
+                funcionario = getFuncionario(view.getCpf());
+                exibiFuncionario();
+                break;
+
         }
+    }
+    
+    public FuncionarioDAO(EntityManagerFactory emf){
+        this.emf = emf;
+        
     }
 
     public void viewToModel() {
@@ -81,9 +96,13 @@ public class FuncionarioDAO {
         }
         DepartamentoDAO daoDep = new DepartamentoDAO(emf);
         funcionario.setNdep(daoDep.getDepartamento(view.getnDep()));
-//        for (ViewDependente viewDep : view.getViewDependente()) {
-//            
-//        }
+        funcionario.setDependenteCollection(new ArrayList<>());
+        for (ViewDependente viewDep : view.getViewDependente()) {
+            Dependente dependente = new Dependente();
+            DependenteDAO daoDependente = new DependenteDAO(emf, viewDep, dependente);
+            daoDependente.viewToModel();
+            funcionario.getDependenteCollection().add(daoDependente.getDependente());
+        }
 
     }
 
@@ -159,7 +178,7 @@ public class FuncionarioDAO {
                     + "\t|\t" + df.format(funcionario1.getDatanasc()) + "\t |\t"
                     + funcionario1.getEndereco() + "  \t|\t" + funcionario1.getSexo()
                     + "\t |\t" + funcionario1.getNdep().getNumero();
-            view.exibiLista(string);
+            view.exibiLinha(string);
         }
 
     }
@@ -172,9 +191,19 @@ public class FuncionarioDAO {
                     + "\t|\t" + df.format(funcionario1.getDatanasc()) + "\t |\t"
                     + funcionario1.getEndereco() + "  \t |\t" + funcionario1.getSexo()
                     + "\t |\t" + funcionario1.getNdep().getNumero();
-            view.exibiLista(string);
+            view.exibiLinha(string);
         }
 
+    }
+
+    public void exibiFuncionario() {
+        view.cabecalho();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String string = funcionario.getNome() + "\t|\t" + funcionario.getCpf()
+                + "\t|\t" + df.format(funcionario.getDatanasc()) + "\t |\t"
+                + funcionario.getEndereco() + "  \t |\t" + funcionario.getSexo()
+                + "\t |\t" + funcionario.getNdep().getNumero();
+        view.exibiLinha(string);
     }
 
     public List<Funcionario> inProject(Funcionario funcRef) {

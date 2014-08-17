@@ -6,7 +6,6 @@
 package empresabuttonup;
 
 import controle.FuncionarioDAO;
-import java.util.List;
 import java.util.Scanner;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
