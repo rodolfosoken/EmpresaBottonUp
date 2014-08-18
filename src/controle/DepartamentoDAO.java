@@ -13,9 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import modelo.Departamento;
-import modelo.Funcionario;
 import modelo.LocaisDepto;
-import modelo.LocaisDeptoPK;
 import view.ViewDepartamento;
 
 /**

@@ -23,6 +23,7 @@ public class ViewFuncionario {
     private String sexo;
     private int nDep;
     private List<ViewDependente> viewDependente = new ArrayList<ViewDependente>();
+    private List<Integer> numProjetos = new ArrayList<Integer>();
 
     public ViewFuncionario() {
         getOpcoes();
@@ -55,13 +56,27 @@ public class ViewFuncionario {
                     if (scdep.nextLine().equals("y")) {
                         System.out.println("Quantos dependentes?: ");
                         Scanner sc3 = new Scanner(System.in);
-                        int num  = sc3.nextInt();
-                        while(num >= 1){
-                        ViewDependente dependente = new ViewDependente(this);
-                        getViewDependente().add(dependente);
-                        num--;
+                        int num = sc3.nextInt();
+                        while (num >= 1) {
+                            ViewDependente dependente = new ViewDependente(this);
+                            getViewDependente().add(dependente);
+                            num--;
                         }
                     }
+                    System.out.println("Possui Projeto? (y\\n): ");
+                    Scanner scProj = new Scanner(System.in);
+                    if (scProj.nextLine().equals("y")) {
+                        System.out.println("Quantos Projetos?: ");
+                        Scanner sc3 = new Scanner(System.in);
+                        int num = sc3.nextInt();
+                        while (num >= 1) {
+                            System.out.println("Insira o numero do projeto:");
+                            Scanner sc4 = new Scanner(System.in);
+                            getNumProjetos().add(sc4.nextInt());
+                            num--;
+                        }
+                    }
+
                     return;
 
                 case 2:
@@ -69,11 +84,11 @@ public class ViewFuncionario {
                     Scanner sc1 = new Scanner(System.in);
                     setCpf(sc1.nextLine());
                     return;
-                    
+
                 case 3:
                     System.out.println("Funcionarios da empresa:");
                     return;
-                    
+
                 case 4:
                     System.out.println("Insira o CPF");
                     Scanner sc3 = new Scanner(System.in);
@@ -85,7 +100,7 @@ public class ViewFuncionario {
                     Scanner sc4 = new Scanner(System.in);
                     setCpf(sc4.nextLine());
                     return;
-                    
+
                 case 6:
                     return;
 
@@ -186,7 +201,6 @@ public class ViewFuncionario {
         this.nDep = nDep;
     }
 
-
     /**
      * @return the viewDependente
      */
@@ -213,6 +227,20 @@ public class ViewFuncionario {
      */
     public void setOp(int op) {
         this.op = op;
+    }
+
+    /**
+     * @return the numProjetos
+     */
+    public List<Integer> getNumProjetos() {
+        return numProjetos;
+    }
+
+    /**
+     * @param numProjetos the numProjetos to set
+     */
+    public void setNumProjetos(List<Integer> numProjetos) {
+        this.numProjetos = numProjetos;
     }
 
 }

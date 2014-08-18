@@ -8,15 +8,18 @@ package empresabuttonup;
 import controle.DepartamentoDAO;
 import controle.DependenteDAO;
 import controle.FuncionarioDAO;
+import controle.ProjetoDAO;
 import java.util.Scanner;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import modelo.Departamento;
 import modelo.Dependente;
 import modelo.Funcionario;
+import modelo.Projeto;
 import view.ViewDepartamento;
 import view.ViewDependente;
 import view.ViewFuncionario;
+import view.ViewProjeto;
 
 /**
  *
@@ -42,11 +45,17 @@ public class EmpresaButtonUp {
                     Funcionario model = new Funcionario();
                     FuncionarioDAO dao = new FuncionarioDAO(emf, view, model);
                     break;
-                    
+
                 case 2:
                     ViewDependente viewDependente = new ViewDependente();
                     Dependente modelDependente = new Dependente();
                     DependenteDAO daoDependente = new DependenteDAO(emf, viewDependente, modelDependente);
+                    break;
+
+                case 3:
+                    ViewProjeto viewProj = new ViewProjeto();
+                    Projeto modelProj = new Projeto();
+                    ProjetoDAO daoProj = new ProjetoDAO(emf, viewProj, modelProj);
                     break;
 
                 case 4:
@@ -54,12 +63,12 @@ public class EmpresaButtonUp {
                     Departamento modelDepto = new Departamento();
                     DepartamentoDAO daoDepto = new DepartamentoDAO(emf, viewDepartamento, modelDepto);
                     break;
-                    
+
                 case 5:
                     return;
             }
         }
-                
+
     }
 
 }

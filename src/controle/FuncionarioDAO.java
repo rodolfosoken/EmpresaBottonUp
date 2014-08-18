@@ -8,6 +8,7 @@ package controle;
 import controle.exceptions.NonexistentEntityException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -48,6 +49,7 @@ public class FuncionarioDAO {
         //faz o papel do ActionListener
         switch (view.getOp()) {
             case 1:
+                viewToModel();
                 insere();
                 System.out.println("Funcionario cadastrado com sucesso!");
                 break;
@@ -97,12 +99,20 @@ public class FuncionarioDAO {
         DepartamentoDAO daoDep = new DepartamentoDAO(emf);
         funcionario.setNdep(daoDep.findDepartamento(view.getnDep()));
         funcionario.setDependenteCollection(new ArrayList<>());
+        funcionario.setProjetoCollection(new ArrayList<>());
         for (ViewDependente viewDep : view.getViewDependente()) {
             Dependente dependente = new Dependente();
             DependenteDAO daoDependente = new DependenteDAO(emf, viewDep, dependente);
             daoDependente.viewToModel();
             funcionario.getDependenteCollection().add(daoDependente.getDependente());
         }
+        for (int numero : view.getNumProjetos()) {
+            Projeto proj = new Projeto();
+            ProjetoDAO daoProj = new ProjetoDAO(emf);
+            proj = daoProj.findProjeto(numero);
+            funcionario.getProjetoCollection().add(proj);
+        }
+        
 
     }
 
