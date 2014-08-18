@@ -75,11 +75,13 @@ public class ViewFuncionario {
                     return;
                     
                 case 4:
+                    System.out.println("Insira o CPF");
                     Scanner sc3 = new Scanner(System.in);
                     setCpf(sc3.nextLine());
                     return;
 
                 case 5:
+                    System.out.println("Insira o CPF: ");
                     Scanner sc4 = new Scanner(System.in);
                     setCpf(sc4.nextLine());
                     return;

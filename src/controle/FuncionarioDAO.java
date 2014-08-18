@@ -95,7 +95,7 @@ public class FuncionarioDAO {
             Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         DepartamentoDAO daoDep = new DepartamentoDAO(emf);
-        funcionario.setNdep(daoDep.getDepartamento(view.getnDep()));
+        funcionario.setNdep(daoDep.findDepartamento(view.getnDep()));
         funcionario.setDependenteCollection(new ArrayList<>());
         for (ViewDependente viewDep : view.getViewDependente()) {
             Dependente dependente = new Dependente();

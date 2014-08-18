@@ -5,13 +5,16 @@
  */
 package empresabuttonup;
 
+import controle.DepartamentoDAO;
 import controle.DependenteDAO;
 import controle.FuncionarioDAO;
 import java.util.Scanner;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import modelo.Departamento;
 import modelo.Dependente;
 import modelo.Funcionario;
+import view.ViewDepartamento;
 import view.ViewDependente;
 import view.ViewFuncionario;
 
@@ -47,8 +50,10 @@ public class EmpresaButtonUp {
                     break;
 
                 case 4:
-                    
-                    return;
+                    ViewDepartamento viewDepartamento = new ViewDepartamento();
+                    Departamento modelDepto = new Departamento();
+                    DepartamentoDAO daoDepto = new DepartamentoDAO(emf, viewDepartamento, modelDepto);
+                    break;
                     
                 case 5:
                     return;
